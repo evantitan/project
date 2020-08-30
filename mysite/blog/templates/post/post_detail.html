@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<p></p>
+
+<div class="container-fluid" style="padding:0px">
+<div class="row">
+    <div class="col-sm-4 col-md-4 col-lg-8">
+      <div class="card" style="margin-left:0%">
+          <div class="card-header" style="padding-top:0%">
+            <strong>{{ post.title|capfirst }}</strong><span style="font-weight:initial;margin-left:10px;opacity:50%">{{ post.publish }}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ post.body|safe }}</p>
+      </div>
+    </div>
+
+  <div class="col-sm-8 col-md-6 col-lg-4" style="padding:1px">
+    <div class="card">
+      <div class="card-header" style="padding-top:0%">
+        similar posts
+      </div>
+      <div class="card-body">
+        {% for post in similar_posts %}
+        <h6><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h6>
+        {% endfor %}
+      </div>
+    </div>
+
+{% endblock %}

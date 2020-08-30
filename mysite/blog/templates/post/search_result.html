@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <br>
+  <h6 class='text-center'>Found {{ results.count }} posts for '{{ query }}'</h6><hr><br><br>
+  <div class="col-lg-12" style="padding:0px">
+    <div class="card border-light">
+        {% for post in results %}
+        <div class="card-header">
+          <a style="color:green" href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
+        <span style="font-weight:initial;padding:10px;opacity:50%">{{ post.publish }}</span>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ post.body|safe|truncatewords:20 }}</p>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

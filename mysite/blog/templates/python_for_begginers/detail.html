@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<div style='background-color:#52565A'>
+  <br>
+</div>
+<div class="container-fluid" style="padding:0px">
+<div class="row">
+<div class="col-sm-8 col-md-6 col-lg-3" style="padding:0px">
+<div class="container"style='padding:0px'>
+<div style='background-color:#4381A4'><h5 class='text-center'>{{ post.subject.topic }}</h5><br></div>
+<div class="jumbotron" style='padding:0px'>
+<table class="table table-hover table-sm">
+<tbody>
+  {% for post in all_posts %}
+  <tr><td style='padding:0px;margin-left:0%'>
+<h6 style='margin-left:5px'>
+  <a style="color:#474649; padding:1px;margin-left:10px" class="nav-link" href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a></h6>
+</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+<div class="col-sm-4 col-md-4 col-lg-9">
+<div class='card-header'>
+<h5>{{ post.title|capfirst }}<span style="margin-left:10px;opacity:40%;font-size:80%">{{ post.publish }}</span>
+</h5></div>
+<a href="{% url 'blog:bookmark_post' post.id %}" style='margin-right:10px'>
+    <span style='float:left;color:#4381A4;margin-top:5px'>
+      {% if is_bookmarked %}
+      <i class='fas fa-bookmark fa-lg'></i>
+      {% else %}
+    <i class='far fa-bookmark fa-lg'></i>
+    {% endif %}
+  </span>
+</a>
+Tags: {% for tag in all_tags %}
+<a href="{% url 'blog:post_list_by_tag' tag.name %}" style='color:#4381A4'>{{ tag.name }}</a>{% endfor %}
+<div class="card-body">
+  <p class="card-text">{{ post.body|safe }}</p></div>
+</div></div></div>
+  <hr style="width:100%;text-align:left;margin-left:0">
+  <div class="container-fluid"style='margin-top:15px;background-color:#E6E6E6'>
+    <ul><br>
+      <h5 style='margin-top:20px;color:#52565A'><i class='fa fa-comments fa-lg' area-hidden='true'></i>    {{ comments.count }} comments</h5><br><br>
+      {% for comment in comments %}
+        {% if comment.user %}
+      <h6><i class='fa fa-user-tie'></i>
+        <span style='margin-left:8px'>{{ comment.user.first_name|capfirst }}<span style="font-size:90%;margin-left:10px;opacity:50%">{{ comment.created_on }}</span></span>
+      </h6>
+        {% else %}
+      <h6><i class='fa fa-user'></i>
+        <span style='margin-left:8px'>{{ comment.name|capfirst }}<span style="font-size:90%;margin-left:10px;opacity:50%">{{ comment.created_on }}</span></span></h6>
+        {% endif %}
+        <p style='margin-left:30px'>{{ comment.body }}</p>
+      {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+    </ul>
+      <hr>
+      <div class='container'>
+          <div class='col-lg-6 col-md-12 col-sm-12'>
+              <form action="{% url 'blog:post_comment' post.id %}" method="post">
+                {% csrf_token %}
+                {% if request.user.is_authenticated %}
+                {{ user_comment_form|crispy }}
+                <button class='btn btn-primary' type="submit" name="button">comment</button>
+                {% else %}
+                {{ comment_form|crispy }}
+                <button class='btn btn-primary' type="submit" name="button">comment</button>
+                  or
+                <a href="{% url 'account:login' %}">Login</a>
+                {% endif %}
+              </form>
+              <br>
+          </div>
+    </div>
+    </div>
+
+{% endblock %}

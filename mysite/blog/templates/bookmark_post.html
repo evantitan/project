@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h6 style='margin-left:15px'>{{ all_bookmarks.count }} saved posts</h6><br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" style="padding:0px">
+      <div class="card border-light">
+    {% for bookmark in all_bookmarks %}
+    <div class="card-header">
+<div><a href="{% url 'blog:delete_bookmark' bookmark.id %}"><i class='fas fa-trash fa-lg'></i></a>
+    <a style="color:green;margin-left:10px" href="{{ bookmark.post.get_absolute_url }}">{{ bookmark.post.title|capfirst }}</a>
+      <span style="font-weight:initial;padding:10px;opacity:50%">{{ bookmark.post.publish }} | saved on {{ bookmark.bookmarked_on }}</span>
+      </div>
+    </div>
+        <div class="card-body">
+            <p class="card-text">{{ bookmark.post.body|safe|truncatewords:20 }}</p>
+          </div>
+          <div class="col-lg-2">
+            <p>{{ bookmark.created_on }}<p>
+          </div>
+          <br>
+          {% endfor %}
+      </div>
+    </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+</div>
+<hr style="width:100%;text-align:center;margin-left:0">
+
+
+{% endblock content %}
